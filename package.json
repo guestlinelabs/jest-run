@@ -1,0 +1,35 @@
+{
+  "name": "jest-run",
+  "version": "1.0.0",
+  "repository": "guestlinelabs/jest-run",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6"
+  },
+  "bugs": {
+    "url": "https://github.com/guestlinelabs/jest-run/issues"
+  },
+  "files": [
+    "bin",
+    "config"
+  ],
+  "bin": {
+    "jest-run": "./bin/scripts.js"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.3",
+    "babel-preset-react-app": "^3.1.1",
+    "dotenv": "^5.0.1",
+    "object-assign": "^4.1.1",
+    "promise": "^8.0.1",
+    "raf": "^3.4.0",
+    "whatwg-fetch": "^2.0.4"
+  },
+  "devDependencies": {
+    "jest": "^22.4.3"
+  },
+  "peerDependencies": {
+    "jest": "^22.4.3"
+  }
+}
