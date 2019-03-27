@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 const jest = require('jest');
 
@@ -64,7 +63,7 @@ if (argv.indexOf('--no-watch') !== -1) {
   argv = argv.filter(arg => arg !== '--no-watch');
 }
 
-const createJestConfig = require('./utils/createJestConfig');
+const createJestConfig = require('../utils/createJestConfig');
 argv.push(
   '--config',
   JSON.stringify(
