@@ -1,6 +1,6 @@
 {
   "name": "jest-run",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "repository": "guestlinelabs/jest-run",
   "license": "MIT",
   "engines": {
@@ -11,7 +11,8 @@
   },
   "files": [
     "bin",
-    "config"
+    "config",
+    "utils"
   ],
   "bin": {
     "jest-run": "./bin/scripts.js"
