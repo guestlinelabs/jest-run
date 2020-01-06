@@ -14,6 +14,8 @@ module.exports = (resolve, rootDir, isEjecting) => {
     : undefined;
 
   const config = {
+    roots: ['<rootDir>/src'],
+
     collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
 
     setupFiles: [require.resolve('react-app-polyfill/jsdom')],
@@ -21,9 +23,9 @@ module.exports = (resolve, rootDir, isEjecting) => {
     setupFilesAfterEnv: setupTestsFile ? [setupTestsFile] : [],
     testMatch: [
       '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}'
+      '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}'
     ],
-    testEnvironment: 'jsdom',
+    testEnvironment: 'jest-environment-jsdom-fourteen',
     testURL: 'http://localhost',
     transform: {
       '^.+\\.(js|jsx|ts|tsx)$': resolve('config/babelTransform.js'),
@@ -41,31 +43,42 @@ module.exports = (resolve, rootDir, isEjecting) => {
     moduleFileExtensions: [...paths.moduleFileExtensions, 'node'].filter(
       ext => !ext.includes('mjs')
     ),
-    watchPlugins: [
-      require.resolve('jest-watch-typeahead/filename'),
-      require.resolve('jest-watch-typeahead/testname')
-    ]
+    watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname']
   };
   if (rootDir) {
     config.rootDir = rootDir;
   }
   const overrides = Object.assign({}, require(paths.appPackageJson).jest);
   const supportedKeys = [
+    'clearMocks',
     'collectCoverageFrom',
+    'coveragePathIgnorePatterns',
     'coverageReporters',
     'coverageThreshold',
+    'displayName',
     'extraGlobals',
     'globalSetup',
     'globalTeardown',
+    'moduleNameMapper',
     'resetMocks',
     'resetModules',
+    'restoreMocks',
     'snapshotSerializers',
+    'transform',
+    'transformIgnorePatterns',
     'watchPathIgnorePatterns'
   ];
   if (overrides) {
     supportedKeys.forEach(key => {
-      if (overrides.hasOwnProperty(key)) {
-        config[key] = overrides[key];
+      if (Object.prototype.hasOwnProperty.call(overrides, key)) {
+        if (Array.isArray(config[key]) || typeof config[key] !== 'object') {
+          // for arrays or primitive types, directly override the config key
+          config[key] = overrides[key];
+        } else {
+          // for object types, extend gracefully
+          config[key] = Object.assign({}, config[key], overrides[key]);
+        }
+
         delete overrides[key];
       }
     });
