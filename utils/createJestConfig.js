@@ -7,20 +7,31 @@ const paths = require('../config/paths');
 module.exports = (resolve, rootDir, isEjecting) => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
-  const setupTestsMatches = paths.testsSetup.match(/src[/\\]setupTests\.(.+)/);
-  const setupTestsFileExtension = (setupTestsMatches && setupTestsMatches[1]) || 'js';
-  const setupTestsFile = fs.existsSync(paths.testsSetup)
-    ? `<rootDir>/src/setupTests.${setupTestsFileExtension}`
-    : undefined;
+  const setupTestsFiles = ['src/setupTests', 'test/setupTests', 'tests/setupTests'];
+  const setupFilesAfterEnv = [];
+  setupTestsFiles.forEach(setupTestsFile => {
+    const filePath = paths.resolveModule(paths.resolveApp, setupTestsFile);
+
+    const setupTestsMatches = filePath.match(/[/\\]setupTests\.(.+)/);
+    const setupTestsFileExtension = (setupTestsMatches && setupTestsMatches[1]) || 'js';
+    if (fs.existsSync(filePath)) {
+      setupFilesAfterEnv.push(`<rootDir>/${setupTestsFile}.${setupTestsFileExtension}`);
+    }
+  });
 
   const config = {
     roots: ['<rootDir>/src', '<rootDir>/test', '<rootDir>/tests'],
 
-    collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', 'tests?/**/*.{js,jsx,ts,tsx}','!src/**/*.d.ts', '!tests?/**/*.d.ts'],
+    collectCoverageFrom: [
+      'src/**/*.{js,jsx,ts,tsx}',
+      'tests?/**/*.{js,jsx,ts,tsx}',
+      '!src/**/*.d.ts',
+      '!tests?/**/*.d.ts'
+    ],
 
     setupFiles: [require.resolve('react-app-polyfill/jsdom')],
 
-    setupFilesAfterEnv: setupTestsFile ? [setupTestsFile] : [],
+    setupFilesAfterEnv,
     testMatch: [
       '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
       '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
