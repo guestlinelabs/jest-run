@@ -16,7 +16,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
   const config = {
     roots: ['<rootDir>/src', '<rootDir>/test', '<rootDir>/tests'],
 
-    collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', 'tests?/**/*.{js,jsx,ts,tsx}','!src/**/*.d.ts'],
+    collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', 'tests?/**/*.{js,jsx,ts,tsx}','!src/**/*.d.ts', '!tests?/**/*.d.ts'],
 
     setupFiles: [require.resolve('react-app-polyfill/jsdom')],
 
@@ -25,7 +25,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
       '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
       '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
       '<rootDir>/tests?/**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '<rootDir>/tests?/**/*.{spec,test}.{js,jsx,ts,tsx}',
+      '<rootDir>/tests?/**/*.{js,jsx,ts,tsx}'
     ],
     testEnvironment: 'jest-environment-jsdom-fourteen',
     testURL: 'http://localhost',
