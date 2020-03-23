@@ -7,36 +7,46 @@ const paths = require('../config/paths');
 module.exports = (resolve, rootDir, isEjecting) => {
   // Use this instead of `paths.testsSetup` to avoid putting
   // an absolute filename into configuration after ejecting.
-  const setupTestsFiles = ['src/setupTests', 'test/setupTests', 'tests/setupTests'];
-  const setupFilesAfterEnv = [];
-  setupTestsFiles.forEach(setupTestsFile => {
-    const filePath = paths.resolveModule(paths.resolveApp, setupTestsFile);
 
+  const possibleTestFolders = ['src', 'test', 'tests'];
+  const existingTestFolders = possibleTestFolders.filter(folder => {
+    const absolutePath = paths.resolveApp(folder);
+    return fs.existsSync(absolutePath);
+  });
+
+  const setupFilesAfterEnv = [];
+  existingTestFolders.forEach(testFolder => {
+    const filePath = paths.resolveModule(paths.resolveApp, `${testFolder}/setupTests`);
     const setupTestsMatches = filePath.match(/[/\\]setupTests\.(.+)/);
     const setupTestsFileExtension = (setupTestsMatches && setupTestsMatches[1]) || 'js';
+
     if (fs.existsSync(filePath)) {
       setupFilesAfterEnv.push(`<rootDir>/${setupTestsFile}.${setupTestsFileExtension}`);
     }
   });
 
   const config = {
-    roots: ['<rootDir>/src', '<rootDir>/test', '<rootDir>/tests'],
+    roots: existingTestFolders.map(testFolder => `<rootDir>/${testFolder}`),
 
-    collectCoverageFrom: [
-      'src/**/*.{js,jsx,ts,tsx}',
-      'tests?/**/*.{js,jsx,ts,tsx}',
-      '!src/**/*.d.ts',
-      '!tests?/**/*.d.ts'
-    ],
+    collectCoverageFrom: existingTestFolders
+      .map(testFolder => [`${testFolder}/**/*.{js,jsx,ts,tsx}`, `!${testFolder}/**/*.d.ts`])
+      .reduce((acc, folders) => [...acc, ...folders], []),
 
     setupFiles: [require.resolve('react-app-polyfill/jsdom')],
 
     setupFilesAfterEnv,
-    testMatch: [
-      '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
-      '<rootDir>/tests?/**/*.{js,jsx,ts,tsx}'
-    ],
+    testMatch: existingTestFolders
+      .map(testFolder => {
+        if (testFolder.includes('test')) {
+          return [`<rootDir>/${testFolder}/**/*.{js,jsx,ts,tsx}`];
+        }
+        return [
+          `<rootDir>/${testFolder}/**/__tests__/**/*.{js,jsx,ts,tsx}`,
+          `<rootDir>/${testFolder}/**/*.{spec,test}.{js,jsx,ts,tsx}`
+        ];
+      })
+      .reduce((acc, folders) => [...acc, ...folders], []),
+
     testEnvironment: 'jest-environment-jsdom-fourteen',
     testURL: 'http://localhost',
     transform: {
