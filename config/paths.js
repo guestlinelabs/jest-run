@@ -144,4 +144,6 @@ if (
 }
 // @remove-on-eject-end
 
+module.exports.resolveApp = resolveApp;
+module.exports.resolveModule = resolveModule;
 module.exports.moduleFileExtensions = moduleFileExtensions;
