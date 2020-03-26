@@ -21,7 +21,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     const setupTestsFileExtension = (setupTestsMatches && setupTestsMatches[1]) || 'js';
 
     if (fs.existsSync(filePath)) {
-      setupFilesAfterEnv.push(`<rootDir>/${setupTestsFile}.${setupTestsFileExtension}`);
+      setupFilesAfterEnv.push(`<rootDir>/${testFolder}/setupTests.${setupTestsFileExtension}`);
     }
   });
 
