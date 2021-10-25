@@ -1,6 +1,6 @@
 {
   "name": "jest-run",
-  "version": "1.1.6",
+  "version": "1.2.0",
   "repository": "guestlinelabs/jest-run",
   "license": "MIT",
   "engines": {
@@ -34,7 +34,7 @@
     "prettier-config-guestline": "1.0.1"
   },
   "peerDependencies": {
-    "jest": "^22.4.3"
+    "jest": "^26.0.0"
   },
   "lint-staged": {
     "{src}/**/*.{ts,tsx,js,jsx,json,css,scss,less}": [
