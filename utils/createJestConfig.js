@@ -47,15 +47,15 @@ module.exports = (resolve, rootDir, isEjecting) => {
       })
       .reduce((acc, folders) => [...acc, ...folders], []),
 
-    testEnvironment: 'jest-environment-jsdom-fourteen',
+    testEnvironment: 'jsdom',
     testURL: 'http://localhost',
     transform: {
-      '^.+\\.(js|jsx|ts|tsx)$': resolve('config/babelTransform.js'),
+      '^.+\\.(js|jsx|mjs|cjs|ts|tsx)$': resolve('config/babelTransform.js'),
       '^.+\\.css$': resolve('config/cssTransform.js'),
-      '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': resolve('config/fileTransform.js')
+      '^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)': resolve('config/fileTransform.js')
     },
     transformIgnorePatterns: [
-      '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$',
+      '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
       '^.+\\.module\\.(css|sass|scss)$'
     ],
     moduleNameMapper: {
@@ -65,7 +65,8 @@ module.exports = (resolve, rootDir, isEjecting) => {
     moduleFileExtensions: [...paths.moduleFileExtensions, 'node'].filter(
       ext => !ext.includes('mjs')
     ),
-    watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname']
+    watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
+    resetMocks: true
   };
   if (rootDir) {
     config.rootDir = rootDir;

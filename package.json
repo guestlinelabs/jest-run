@@ -1,6 +1,6 @@
 {
   "name": "jest-run",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "repository": "guestlinelabs/jest-run",
   "license": "MIT",
   "engines": {
@@ -18,23 +18,20 @@
     "jest-run": "./bin/scripts.js"
   },
   "dependencies": {
-    "@babel/core": "7.7.7",
-    "babel-jest": "24.9.0",
-    "babel-preset-react-app": "9.1.0",
-    "dotenv": "8.2.0",
-    "jest-watch-typeahead": "0.4.2",
-    "react-app-polyfill": "1.0.5",
-    "react-dev-utils": "10.0.0"
+    "@babel/core": "^7.16.0",
+    "babel-jest": "^27.4.2",
+    "babel-preset-react-app": "^10.0.1",
+    "dotenv": "^10.0.0",
+    "jest-watch-typeahead": "^1.0.0",
+    "react-app-polyfill": "^3.0.0",
+    "react-dev-utils": "^12.0.1"
   },
   "devDependencies": {
     "husky": "3.1.0",
-    "jest": "24.9.0",
+    "jest": "^27.4.3",
     "lint-staged": "9.5.0",
-    "prettier": "1.19.1",
-    "prettier-config-guestline": "1.0.1"
-  },
-  "peerDependencies": {
-    "jest": "^26.0.0 || ^27"
+    "prettier": "2.8.1",
+    "prettier-config-guestline": "2.1.0"
   },
   "lint-staged": {
     "{src}/**/*.{ts,tsx,js,jsx,json,css,scss,less}": [
