@@ -9,13 +9,13 @@ module.exports = (resolve, rootDir, isEjecting) => {
   // an absolute filename into configuration after ejecting.
 
   const possibleTestFolders = ['src', 'test', 'tests'];
-  const existingTestFolders = possibleTestFolders.filter(folder => {
+  const existingTestFolders = possibleTestFolders.filter((folder) => {
     const absolutePath = paths.resolveApp(folder);
     return fs.existsSync(absolutePath);
   });
 
   const setupFilesAfterEnv = [];
-  existingTestFolders.forEach(testFolder => {
+  existingTestFolders.forEach((testFolder) => {
     const filePath = paths.resolveModule(paths.resolveApp, `${testFolder}/setupTests`);
     const setupTestsMatches = filePath.match(/[/\\]setupTests\.(.+)/);
     const setupTestsFileExtension = (setupTestsMatches && setupTestsMatches[1]) || 'js';
@@ -26,17 +26,17 @@ module.exports = (resolve, rootDir, isEjecting) => {
   });
 
   const config = {
-    roots: existingTestFolders.map(testFolder => `<rootDir>/${testFolder}`),
+    roots: existingTestFolders.map((testFolder) => `<rootDir>/${testFolder}`),
 
     collectCoverageFrom: existingTestFolders
-      .map(testFolder => [`${testFolder}/**/*.{js,jsx,ts,tsx}`, `!${testFolder}/**/*.d.ts`])
+      .map((testFolder) => [`${testFolder}/**/*.{js,jsx,ts,tsx}`, `!${testFolder}/**/*.d.ts`])
       .reduce((acc, folders) => [...acc, ...folders], []),
 
     setupFiles: [require.resolve('react-app-polyfill/jsdom')],
 
     setupFilesAfterEnv,
     testMatch: existingTestFolders
-      .map(testFolder => {
+      .map((testFolder) => {
         if (testFolder.includes('test')) {
           return [`<rootDir>/${testFolder}/**/*.{js,jsx,ts,tsx}`];
         }
@@ -48,7 +48,9 @@ module.exports = (resolve, rootDir, isEjecting) => {
       .reduce((acc, folders) => [...acc, ...folders], []),
 
     testEnvironment: 'jsdom',
-    testURL: 'http://localhost',
+    testEnvironmentOptions: {
+      url: 'http://localhost'
+    },
     transform: {
       '^.+\\.(js|jsx|mjs|cjs|ts|tsx)$': resolve('config/babelTransform.js'),
       '^.+\\.css$': resolve('config/cssTransform.js'),
@@ -63,7 +65,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
       '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy'
     },
     moduleFileExtensions: [...paths.moduleFileExtensions, 'node'].filter(
-      ext => !ext.includes('mjs')
+      (ext) => !ext.includes('mjs')
     ),
     watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
     resetMocks: true
@@ -92,7 +94,7 @@ module.exports = (resolve, rootDir, isEjecting) => {
     'watchPathIgnorePatterns'
   ];
   if (overrides) {
-    supportedKeys.forEach(key => {
+    supportedKeys.forEach((key) => {
       if (Object.prototype.hasOwnProperty.call(overrides, key)) {
         if (Array.isArray(config[key]) || typeof config[key] !== 'object') {
           // for arrays or primitive types, directly override the config key
@@ -125,11 +127,11 @@ module.exports = (resolve, rootDir, isEjecting) => {
           chalk.red(
             '\nOut of the box, Jest Run only supports overriding ' +
               'these Jest options:\n\n' +
-              supportedKeys.map(key => chalk.bold('  \u2022 ' + key)).join('\n') +
+              supportedKeys.map((key) => chalk.bold('  \u2022 ' + key)).join('\n') +
               '.\n\n' +
               'These options in your package.json Jest configuration ' +
               'are not currently supported by Jest Run:\n\n' +
-              unsupportedKeys.map(key => chalk.bold('  \u2022 ' + key)).join('\n') +
+              unsupportedKeys.map((key) => chalk.bold('  \u2022 ' + key)).join('\n') +
               '\n\nIf you wish to override other Jest options, you need to ' +
               'eject from the default setup. You can do so by running ' +
               chalk.bold('npm run eject') +
